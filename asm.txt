@@ -1,0 +1,52 @@
+.model small
+.386
+.stack 100h
+.data
+	A	db	-127d
+	B	db	-127d
+	C	db	-127d
+	D	dd	?
+.code
+start:
+	mov	ax, @data
+	mov	ds, ax
+	mov	bh, A
+	mov	cl, B
+	mov	bl, C
+	movsx	bp, cl
+	mov	di, bp
+	sal	bp, 3
+	sal	di, 1
+	sub	bp, di
+	movsx	ax, bh
+	movsx	si, bl
+	sub	si, ax
+	add	si, 8h
+	add	si, bp
+	jz	L
+	mov	bp, ax
+	imul	al
+	imul	bp
+	sal	edx, 16
+	or	eax, edx
+	mov	ebp, eax
+	sal	ebp, 3
+	sub	ebp, eax 
+	movsx	ax, cl
+	add	di, ax
+	imul	di
+	movzx	eax, ax
+	sal	edx, 16
+	or	eax, edx
+	sub	eax, 2
+	add	eax, ebp
+	movsx	ebp, bl
+	add	eax, ebp
+	movsx	esi , si
+	cdq
+	idiv	esi
+	mov	D, eax
+L:
+	mov	ah, 4ch
+	int	21h
+end start
